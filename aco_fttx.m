@@ -1,3 +1,10 @@
+%Some tests
+
+test_world = world(22,33,44)
+test_world = update(test_world,99)
+
+
+
 % Procedure for ACO
 
 
