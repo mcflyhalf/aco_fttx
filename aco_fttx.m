@@ -1,7 +1,7 @@
 %Some tests
 
-test_world = world(22,33,44)
-test_world = update(test_world,99)
+test_world = world('HC_DistMat.csv','CS_DistMat.csv',6,3)
+
 
 
 

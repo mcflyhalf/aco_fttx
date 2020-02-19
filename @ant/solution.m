@@ -1,0 +1,1 @@
+% Solution: a structured solution that contains Link matrices, Used_equipment vectors and the cost 
