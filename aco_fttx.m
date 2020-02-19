@@ -1,6 +1,9 @@
 %Some tests
 
 test_world = world('HC_DistMat.csv','CS_DistMat.csv',6,3)
+w=get_vars(test_world)
+
+test_ant = ant(test_world)
 
 
 

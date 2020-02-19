@@ -1,6 +1,3 @@
-
-
-
 function w = world(HC_csv_file, CS_csv_file, num_ants, elitism_num)
 ##  HC_csv_file = 'HC_DistMat.csv'
 ##  CS_csv_file = 'CS_DistMat.csv'
@@ -22,12 +19,12 @@ function w = world(HC_csv_file, CS_csv_file, num_ants, elitism_num)
   closure_size_check= sscanf(last_c2{},'C%d%d%d%d')
   splitter_size= sscanf(last_s{},'S%d%d%d%d')
 
-  DistHC_matrix = (reshape(HC_vector_Array,home_size,closure_size))';
-  DistCS_matrix = (reshape(CS_vector_Array,closure_size,splitter_size))';
+  w.DistHC_matrix = (reshape(HC_vector_Array,home_size,closure_size))';
+  w.DistCS_matrix = (reshape(CS_vector_Array,closure_size,splitter_size))';
 ##  DistSE_matrix = SE_vector_Array;
   
-  Pher_HC = ones(closure_size,home_size);
-  Pher_CS = ones(splitter_size,Pher_HC);
+  w.Pher_HC = ones(closure_size,home_size);
+  w.Pher_CS = ones(splitter_size,w.Pher_HC);
 
   w=class(w,"world");
 endfunction
