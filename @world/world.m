@@ -1,21 +1,33 @@
-##fid = fopen("HC_DistMat.csv")
-##HC_vector_Array= textscan(fid,"%s,%s,%f" ,"headerlines",2,"delimiter", ",")
-##
-function w = world(HC_csv_file, CS_csv_file, SE_scv_file, num_ants, elitism_num)
 
+
+
+function w = world(HC_csv_file, CS_csv_file, num_ants, elitism_num)
+##  HC_csv_file = 'HC_DistMat.csv'
+##  CS_csv_file = 'CS_DistMat.csv'
+   
   %Read Distance values from the csv files; Output - A list of distances betweeen each home/closure/splitter/Exchange
-  HC_vector_Array= csvread(HC_csv_file,1,3); 
-  CS_vector_Array= csvread(CS_csv_file,1,3); 
-  SE_vector_Array= csvread(SE_csv_file,1,3);
+  HC_vector_Array= csvread(HC_csv_file,1,2); % 1;skip headerline, 2;Only pick values in 3rd column (index 2)
+  CS_vector_Array= csvread(CS_csv_file,1,2); 
+##  SE_vector_Array= csvread(SE_csv_file,1,2);
   
-% ??? get home, closre, splitter sizes from list
+  % Determine index_size/number of homes, closures ans splitters
+  [hid,cid,d] =textread(HC_csv_file,"%s,%s,%f" ,"headerlines",1,"delimiter", ",");
+  [sid,ciid,d] =textread(CS_csv_file,"%s,%s,%f" ,"headerlines",1,"delimiter", ",");
+  last_h= hid(end);
+  last_c= cid(end);
+  last_c2= ciid(end);
+  last_s= sid(end);
+  home_size= sscanf(last_h{},'H%d%d%d%d')
+  closure_size= sscanf(last_c{},'C%d%d%d%d')
+  closure_size_check= sscanf(last_c2{},'C%d%d%d%d')
+  splitter_size= sscanf(last_s{},'S%d%d%d%d')
 
   DistHC_matrix = (reshape(HC_vector_Array,home_size,closure_size))';
   DistCS_matrix = (reshape(CS_vector_Array,closure_size,splitter_size))';
-  DistSE_matrix = SE_vector_Array;
+##  DistSE_matrix = SE_vector_Array;
   
-  Pher_HC = ones(home_size,closure_size);
-  Pher_CS = ones(closure_size,splitter_size);
+  Pher_HC = ones(closure_size,home_size);
+  Pher_CS = ones(splitter_size,Pher_HC);
 
   w=class(w,"world");
 endfunction
