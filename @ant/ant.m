@@ -11,5 +11,5 @@ function a = ant(world)
 ##  a.Used_cl = zeros(1,world.splitter_size);
   
 %  a.solution =  vector/matrix containing  Lch_Matrix + Lsc_Matrix + Used_cl + Used_sp
-  
+    a=class(a,"ant"); %an object of the class ant
 endfunction

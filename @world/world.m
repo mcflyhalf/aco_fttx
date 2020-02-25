@@ -19,12 +19,12 @@ function w = world(HC_csv_file, CS_csv_file, num_ants, elitism_num)
   closure_no_check= sscanf(last_c2{},'C%d%d%d%d')
   w.splitter_no= sscanf(last_s{},'S%d%d%d%d')
 
-  w.DistHC_matrix = (reshape(HC_vector_Array,home_no,closure_no))';
-  w.DistCS_matrix = (reshape(CS_vector_Array,closure_no,splitter_no))';
+  w.DistHC_matrix = (reshape(HC_vector_Array,w.home_no,w.closure_no))';
+  w.DistCS_matrix = (reshape(CS_vector_Array,w.closure_no,w.splitter_no))';
 ##  DistSE_matrix = SE_vector_Array;
   
-  w.Pher_HC = ones(closure_no,home_no);
-  w.Pher_CS = ones(splitter_no,closure_no);
+  w.Pher_HC = ones(w.closure_no,w.home_no);
+  w.Pher_CS = ones(w.splitter_no,w.closure_no);
 
   w=class(w,"world"); %an object of the class world
 endfunction

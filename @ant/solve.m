@@ -7,7 +7,9 @@
 % Constraint 2 (Lsc and Lch): A closure can only be linked to a maximum number of homes (update pheromone_ after a selection)
 % Constraint 3 (Lsc): All homes must be linked to a closure and if a closure is linked to a home it has to be linked to a splitter (generate used_cl)
 
-function s = solve(wld,ant,used_elements) % abcd needs to be an instance of world
+
+
+function s = solve(ant,wld) % abcd needs to be an instance of world
   %Given distance matrix and pheromone matrix, update pheromone matrix
   world = get_vars(wld) %use getvars function to access the variables in the world class
   
@@ -29,13 +31,13 @@ function s = solve(wld,ant,used_elements) % abcd needs to be an instance of worl
   % Universal Constraints: Max Distance 
   % if an element in the Dist_Mat is greater than a certain value, then equivalent elements in phermone_mat will be equal to zero
   % Viability Matrix:
-  Viability_HC = DistHC_matrix < MaxDistance_HC
-  Viability_CS = DistCS_matrix < MaxDistance_CS
+  Viability_HC = world.DistHC_matrix < MaxDistance_HC
+  Viability_CS = world.DistCS_matrix < MaxDistance_CS
   
   %%% have a check so that there is at least one option for each home or consider what to do if a home is placed too far from all closures
   
-  Pheromone_HC = Viability_HC.*Pher_HC
-  Pheromone_CS = Viability_CS.*Pher_CS
+  Pheromone_HC = Viability_HC.*world.Pher_HC
+  Pheromone_CS = Viability_CS.*world.Pher_CS
   
   % Step 1; Check if a home has been linked to a closure, if not, select:
   % Loop through the Lhc_matrix columns(homes), if all values in a column are non-zero elements, select the column index(home_number) 
@@ -44,8 +46,8 @@ function s = solve(wld,ant,used_elements) % abcd needs to be an instance of worl
   
         
  % Trial 2: With pheromone matrices: stochastic
-   for h = 1:home_no % for all homes, starting with home 1
-     select_home = sum(Lhc) % check if a link exists between the home and any closures
+   for h = 1:world.home_no % for all homes, starting with home 1
+     select_home = sum(s.Lhc) % check if a link exists between the home and any closures
      if select_home (h) == 0 % if no link exists between the home and closures
        closure_links = sum(Lhc,2) % returns number of homes linked to each closure in an array(1*closures)
        available_closures = closure_links < MaxLinks_CH % returns 0/1 values indicating the availability of each closure
@@ -151,3 +153,11 @@ endfunction
 ##       Lhc(:,h) = links_homecpy
 ##      endif
 ##    endfor
+
+
+%%Test implementation - to discard
+##
+##function s = solve(ant,wld)
+##  s.Lch = ant.Lhc_matrix;
+##  s.pher_cs = get_vars(wld).Pher_CS
+##endfunction
