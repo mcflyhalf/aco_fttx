@@ -1,4 +1,4 @@
-function w = world(HC_csv_file, CS_csv_file, num_ants, elitism_num)
+function w = world(HC_csv_file, CS_csv_file, num_ants, elitism_num,evap)
 ##  HC_csv_file = 'HC_DistMat.csv'
 ##  CS_csv_file = 'CS_DistMat.csv'
    
@@ -23,8 +23,9 @@ function w = world(HC_csv_file, CS_csv_file, num_ants, elitism_num)
   w.DistCS_matrix = (reshape(CS_vector_Array,w.closure_no,w.splitter_no))';
 ##  DistSE_matrix = SE_vector_Array;
   
-  w.Pher_HC = ones(w.closure_no,w.home_no);
-  w.Pher_CS = ones(w.splitter_no,w.closure_no);
+  % Initial pheromone values, should be pulled from the update function
+  w.Pher_HC = ones(w.closure_no,w.home_no); % Initial pheromone values
+  w.Pher_CS = ones(w.splitter_no,w.closure_no); % Initial pheromone values
 
   w=class(w,"world"); %an object of the class world
 endfunction

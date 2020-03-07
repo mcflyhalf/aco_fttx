@@ -11,26 +11,26 @@
 
 function s = solve(ant,wld) % abcd needs to be an instance of world
   %Given distance matrix and pheromone matrix, update pheromone matrix
-  world = get_vars(wld) %use getvars function to access the variables in the world class
+  world = get_vars(wld); %use getvars function to access the variables in the world class
    % Links Between Homes and Closures and Splitters:
-  Lhc = ant.Lhc_matrix %zeros(closures by homes)
-  Lcs = ant.Lcs_matrix % zeros(splitters by closures
-  MaxLinks_CH = 3 % should be pulled from world
-  MaxLinks_SC = 2 % should be pulled from world
-  MaxDistance_HC = 400 % should be pulled from world
-  MaxDistance_CS = 500 % should be pulled from world
+  Lhc = ant.Lhc_matrix; %zeros(closures by homes)
+  Lcs = ant.Lcs_matrix; % zeros(splitters by closures
+  MaxLinks_CH = 4; % should be pulled from world
+  MaxLinks_SC = 3; % should be pulled from world
+  MaxDistance_HC = 400; % should be pulled from world
+  MaxDistance_CS = 500; % should be pulled from world
   
   
   % Universal Constraints: Max Distance 
   % if an element in the Dist_Mat is greater than a certain value, then equivalent elements in phermone_mat will be equal to zero
   % Viability Matrix:
-  Viability_HC = world.DistHC_matrix < MaxDistance_HC
-  Viability_CS = world.DistCS_matrix < MaxDistance_CS
+  Viability_HC = world.DistHC_matrix < MaxDistance_HC;
+  Viability_CS = world.DistCS_matrix < MaxDistance_CS;
   
   %%% have a check so that there is at least one option for each home or consider what to do if a home is placed too far from all closures
   
-  Pheromone_HC = Viability_HC.*world.Pher_HC
-  Pheromone_CS = Viability_CS.*world.Pher_CS
+  Pheromone_HC = Viability_HC.*world.Pher_HC;
+  Pheromone_CS = Viability_CS.*world.Pher_CS;
   
   % Step 1; Check if a home has been linked to a closure, if not, select:
   % Loop through the Lhc_matrix columns(homes), if all values in a column are non-zero elements, select the column index(home_number) 
@@ -39,58 +39,58 @@ function s = solve(ant,wld) % abcd needs to be an instance of world
          
  % Trial 2: With pheromone matrices: stochastic
    for h = 1:world.home_no % for all homes, starting with home 1
-     select_home = sum(Lhc) % check if a link exists between the home and any closures
+     select_home = sum(Lhc); % check if a link exists between the home and any closures
      if select_home (h) == 0 % if no link exists between the home and closures
-       display(Lhc)
-       closure_links = sum(Lhc,2) % returns number of homes linked to each closure in an array(1*closures)
-       available_closures = closure_links < MaxLinks_CH % returns 0/1 values indicating the availability of each closure
-       Pheromone_home = Pheromone_HC(:,h).*available_closures % replaces all phrmn_values btn home and cls to 0 for cls with no capacity
+       display(Lhc);
+       closure_links = sum(Lhc,2); % returns number of homes linked to each closure in an array(1*closures)
+       available_closures = closure_links < MaxLinks_CH; % returns 0/1 values indicating the availability of each closure
+       Pheromone_home = Pheromone_HC(:,h).*available_closures; % replaces all phrmn_values btn home and cls to 0 for cls with no capacity
        % compute probabiltiies
-       p = Pheromone_home
-       t = sum(p(:))
-       p = p./t
-       cum_p = cumsum(p)
-       random_no = rand %generate a random number between 0 and 1
-       links = cum_p > random_no % returns an array indicating which closure to link the home to
-       link_home = zeros(size(links))
+       p = Pheromone_home;
+       t = sum(p(:));
+       p = p./t;
+       cum_p = cumsum(p);
+       random_no = rand; %generate a random number between 0 and 1
+       links = cum_p > random_no; % returns an array indicating which closure to link the home to
+       link_home = zeros(size(links));
        for l=1:length(links)
          if links(l)==1
-            link_home(l) = 1
+            link_home(l) = 1;
            break
          endif
        endfor
-      Lhc(:,h) = link_home
+      Lhc(:,h) = link_home;
       endif
     endfor
-    s.Lhc = Lhc
+    s.Lhc = Lhc;
        
     for c= 1:world.closure_no
-      used_cl = any(Lhc,2)'
+      used_cl = any(Lhc,2)';
       if used_cl(c) == 1 % if the closure is used
-        splitter_links = sum(Lcs,2) % returns no of closures linked to each splitter
-        available_splitters = splitter_links <MaxLinks_SC
-        Pheromone_cl = Pheromone_CS(:,c).*available_splitters
+        splitter_links = sum(Lcs,2); % returns no of closures linked to each splitter
+        available_splitters = splitter_links <MaxLinks_SC;
+        Pheromone_cl = Pheromone_CS(:,c).*available_splitters;
         % compute probabilities
-        k = Pheromone_cl
-        u= sum(k(:))
-        k= k./u
-        cum_k = cumsum(k)
-        randomize = rand
-        linksc= cum_k > randomize
-        link_closure = zeros(size(linksc))
+        k = Pheromone_cl;
+        u= sum(k(:));
+        k= k./u;
+        cum_k = cumsum(k);
+        randomize = rand;
+        linksc= cum_k > randomize;
+        link_closure = zeros(size(linksc));
          for l=1:length(linksc)
            if linksc(l)==1
-              link_closure(l) = 1
+              link_closure(l) = 1;
              break
            endif
          endfor
-         Lcs(:,c) = link_closure
+         Lcs(:,c) = link_closure;
        endif
      endfor    
-      s.Lcs = Lcs 
+      s.Lcs = Lcs;
       
-      s.Used_cl = any(Lhc,2)'
-      s.Used_Sp = any(Lcs,2)'
+      s.Used_cl = any(Lhc,2)';
+      s.Used_sp = any(Lcs,2)';
 endfunction
 
 
