@@ -62,22 +62,31 @@ clear;
       sort_list = sort(copy_list,"ascend");
       elite_list = sort_list(1:elite_ants); 
       
-      %find index of elite ants from the array
+      %find index of elite ants from the array and ant pheromone contribution
+      pheromone_ant_total_lhc = [];
+      pheromone_ant_total_lcs = [];
       elite_list_index = zeros(elite_ants,1);
       for e= 1:elite_ants
         elite_index = find(copy_list==elite_list(e));
-        elite_list_index(e) = elite_index; %%is problematic when more than 1 ant provides a similiar solution
-        %form Lhc and Lcs combo?   
+        elite_list_index(e) = elite_index; %%is problematic when more than 1 ant provides a similiar solution       
+        %Update pheromones
+        % Determine which ants are linked to the least costs and from them:
+        % Get: DistHC, DistSC, Lhc, Lsc and cost from each ant
+        solution_elite_ant = solutions{elite_index};
+        ant_pheromone = update(fttx_world,solution_elite_ant)  
+        pheromone_ant_total_lhc = pheromone_ant_total_lhc.+ ant_pheromone.lhc_pher_update
+        pheromone_ant_total_lcs = pheromone_ant_total_lcs.+ ant_pheromone.lcs_pher_update
       endfor
       
+      %Pheromone update
+      Initial_pheromone = get_vars(fttx_world)
+      pheromone_evaporation_hc = Initial_pheromone.Pher_HC *(1-evap)
+      pheromone_evaporation_cc = Initial_pheromone.Pher_CS *(1-evap)
+      Pheromone_update_lhc = pheromone_evaporation_hc + pheromone_ant_total_lhc
+      Pheromone_update_lcs = pheromone_evaporation_cs + pheromone_ant_total_lcs
       
+      fttx_world = set_vars(fttx_world,'Pher_HC',Pheromone_update_lhc, 'Pher_CS', Pheromone_update_lcs)
       
-##        
-##      
-##      %Update pheromones
-##      % Determine which ants are linked to the least costs and from them:
-##      % Get: DistHC, DistSC, Lhc, Lsc and cost from each ant
-##      
 ##     ###################### Use of set_vars to update pheromones#############
 ##      %Example of changing Pher_CS and Pher_HC
 ##      new_Pher_HC = eye(4)
