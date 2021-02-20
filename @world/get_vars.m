@@ -1,5 +1,5 @@
 %Returns all Variables from world
-% wrld is a structure that contains all variables in the world fes to it
+% wrld is a structure that contains all variables in the world related to it
 function wrld = get_vars(world)
   wrld.DistHC_matrix = world.DistHC_matrix;
   wrld.DistCS_matrix = world.DistCS_matrix; 
