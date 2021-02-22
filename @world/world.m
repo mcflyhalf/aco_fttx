@@ -8,6 +8,10 @@ function w = world(HC_csv_file, CS_csv_file, num_ants, elitism_num,evap)
 ##  SE_vector_Array= csvread(SE_csv_file,1,2);
   
   % Determine index_size/number of homes, closures and splitters
+  % Note that in the csv file, the last row must be the distance between the last HC/SC
+  % Otherwise this section raises an error
+  %e.g. with 12 homes, 6 Closure locations and 4 splitter locations, th last rows should be:
+  % HC => [H12 C6] CS => [S4 C6]
   [hid,cid,d] =textread(HC_csv_file,"%s,%s,%f" ,"headerlines",1,"delimiter", ",");
   [sid,ciid,d] =textread(CS_csv_file,"%s,%s,%f" ,"headerlines",1,"delimiter", ",");
   last_h= hid(end);

@@ -37,14 +37,14 @@ clear;
     evap = 0.5; %evaporation constant
     
     % Data Inputs:
-    HC_DistMat = "HC_DistMat.csv";
-    CS_DistMat = "CS_DistMat.csv";
+    HC_DistMat = "templates\\HC_DistMat_template_long.csv";
+    CS_DistMat = "templates\\CS_DistMat_template_long.csv";
     
 
 
   % Create World
     fttx_world = world(HC_DistMat,CS_DistMat,ants,elite_ants,evap);
-    #return;
+    
     
   %for max_iterations
       #iter = 1
