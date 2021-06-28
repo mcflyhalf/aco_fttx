@@ -1,0 +1,152 @@
+# Created by Octave 6.2.0, Mon Jun 21 17:46:17 2021 GMT <unknown@NyangagaHPX360>
+# name: alltime_best_solutions
+# type: cell
+# rows: 3
+# columns: 1
+# name: <cell-element>
+# type: scalar struct
+# ndims: 2
+ 1 1
+# length: 5
+# name: Lhc
+# type: matrix
+# rows: 7
+# columns: 3
+ 1 0 0
+ 1 0 0
+ 1 0 0
+ 0 0 1
+ 1 0 0
+ 0 0 0
+ 0 0 1
+
+
+# name: Lcs
+# type: matrix
+# rows: 3
+# columns: 4
+ 0 0 1 0
+ 0 0 0 0
+ 1 0 0 0
+
+
+# name: Used_cl
+# type: bool matrix
+# rows: 1
+# columns: 3
+ 1 0 1
+
+
+# name: Used_sp
+# type: bool matrix
+# rows: 1
+# columns: 4
+ 1 0 1 0
+
+
+# name: cost
+# type: scalar
+21682.969403999999
+
+
+
+
+# name: <cell-element>
+# type: scalar struct
+# ndims: 2
+ 1 1
+# length: 5
+# name: Lhc
+# type: matrix
+# rows: 7
+# columns: 3
+ 0 0 1
+ 1 0 0
+ 1 0 0
+ 0 0 1
+ 1 0 0
+ 1 0 0
+ 0 0 1
+
+
+# name: Lcs
+# type: matrix
+# rows: 3
+# columns: 4
+ 0 0 1 0
+ 0 0 0 0
+ 1 0 0 0
+
+
+# name: Used_cl
+# type: bool matrix
+# rows: 1
+# columns: 3
+ 1 0 1
+
+
+# name: Used_sp
+# type: bool matrix
+# rows: 1
+# columns: 4
+ 1 0 1 0
+
+
+# name: cost
+# type: scalar
+24253.499134999998
+
+
+
+
+# name: <cell-element>
+# type: scalar struct
+# ndims: 2
+ 1 1
+# length: 5
+# name: Lhc
+# type: matrix
+# rows: 7
+# columns: 3
+ 0 0 1
+ 1 0 0
+ 1 0 0
+ 0 0 1
+ 1 0 0
+ 1 0 0
+ 0 0 1
+
+
+# name: Lcs
+# type: matrix
+# rows: 3
+# columns: 4
+ 0 0 1 0
+ 0 0 0 0
+ 1 0 0 0
+
+
+# name: Used_cl
+# type: bool matrix
+# rows: 1
+# columns: 3
+ 1 0 1
+
+
+# name: Used_sp
+# type: bool matrix
+# rows: 1
+# columns: 4
+ 1 0 1 0
+
+
+# name: cost
+# type: scalar
+24253.499134999998
+
+
+
+
+
+
+

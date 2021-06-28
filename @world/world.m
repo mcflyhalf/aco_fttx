@@ -10,7 +10,7 @@ function w = world(HC_csv_file, CS_csv_file, num_ants, elitism_num,evap)
   % Determine index_size/number of homes, closures and splitters
   % Note that in the csv file, the last row must be the distance between the last HC/SC
   % Otherwise this section raises an error
-  %e.g. with 12 homes, 6 Closure locations and 4 splitter locations, th last rows should be:
+  %e.g. with 12 homes, 6 Closure locations and 4 splitter locations, the last rows should be:
   % HC => [H12 C6] CS => [S4 C6]
   [hid,cid,d] =textread(HC_csv_file,"%s,%s,%f" ,"headerlines",1,"delimiter", ",");
   [sid,ciid,d] =textread(CS_csv_file,"%s,%s,%f" ,"headerlines",1,"delimiter", ",");
@@ -18,10 +18,10 @@ function w = world(HC_csv_file, CS_csv_file, num_ants, elitism_num,evap)
   last_c= cid(end);
   last_c2= ciid(end);
   last_s= sid(end);
-  w.home_no= sscanf(last_h{},'H%d%d%d%d');
-  w.closure_no= sscanf(last_c{},'C%d%d%d%d');
-  closure_no_check= sscanf(last_c2{},'C%d%d%d%d');
-  w.splitter_no= sscanf(last_s{},'S%d%d%d%d');
+  w.home_no= sscanf(last_h{1},'H%d%d%d%d');
+  w.closure_no= sscanf(last_c{1},'C%d%d%d%d');
+  closure_no_check= sscanf(last_c2{1},'C%d%d%d%d');
+  w.splitter_no= sscanf(last_s{1},'S%d%d%d%d');
 
   %Quirky difference btn the next 2 lines caused by different presentation in
   % the CS and HC Dist mat csv files
@@ -34,6 +34,14 @@ function w = world(HC_csv_file, CS_csv_file, num_ants, elitism_num,evap)
   % Initial pheromone values. Eventually should be pulled from the update function
   w.Pher_HC = ones(w.home_no, w.closure_no); % Initial pheromone values
   w.Pher_CS = ones(w.closure_no, w.splitter_no); % Initial pheromone values
+  w.evap = evap;
+  
+##  The below should be implemented in the world class
+##  But currently live in the solve fxn
+##  w.MaxLinks_CH = 4; % should be pulled from world
+##  w.MaxLinks_SC = 3; % should be pulled from world
+##  w.MaxDistance_HC = 400; % should be pulled from world
+##  w.MaxDistance_CS = 500; % should be pulled from world
 
   w=class(w,"world"); %an object of the class world
 endfunction

@@ -1,6 +1,6 @@
-%%% Methodology of getting the solution to the Lhc and Lcs? 
-% Given parameters of a world, determine the Links between the homes and closures and splitters
-% Apply cosntraints to find viable options using the Dist Matrices (update pheromone_matrix accordingly)
+%%% Methodology of getting a solution to the problem (valid Lhc and Lcs) 
+% Given parameters of a world, determine the Links between the homes => closures and closures => splitters
+% Apply constraints to find viable options using the Dist Matrices (update pheromone_matrix accordingly)
 
 % Compute proabilities to determine links but consider constraints such as;
 % Constraint 1 (Lhc and Lcs): If Distance within matrix is greater than X, replace corresponding pheromone_mat element with zero (before selection)
@@ -10,16 +10,15 @@
 
 
 function s = solve(ant,wld) % wld needs to be an instance of world
-#function s = solve(ant,world) % wld needs to be an instance of world
   %Given distance matrix and pheromone matrix, update pheromone matrix <- Doesnt make sense. Needs to be in update fxn??
   world = get_vars(wld); %use getvars function to access the variables in the world class
    % Links Between Homes and Closures and Splitters:
   Lhc = ant.Lhc_matrix; %zeros(homes by closures)
   Lcs = ant.Lcs_matrix; % zeros(closures by splitters)
-  MaxLinks_CH = 4; % should be pulled from world
-  MaxLinks_SC = 3; % should be pulled from world
-  MaxDistance_HC = 400; % should be pulled from world
-  MaxDistance_CS = 500; % should be pulled from world
+  MaxLinks_CH = 5; % should be pulled from world and called MaxLinks_HC
+  MaxLinks_SC = 4; % should be pulled from world and called MaxLinks_CS
+  MaxDistance_HC = 550; % should be pulled from world. Consider increasing to 3000
+  MaxDistance_CS = 800; % should be pulled from world. Consider increasing to 3000
   
   
   % Universal Constraints: Max Distance 
@@ -28,7 +27,8 @@ function s = solve(ant,wld) % wld needs to be an instance of world
   Viability_HC = world.DistHC_matrix < MaxDistance_HC;
   Viability_CS = world.DistCS_matrix < MaxDistance_CS;
   
-  %%% TODO: have a check so that there is at least one option for each home or consider what to do if a home is placed too far from all closures
+  %%% TODO: have a check so that there is at least one option for each home or 
+  %%% consider what to do if a home is placed too far from all closures
   
   %Set pheromones for unviable links to 0 permanently 
   %(Currently doing this each time a solution is sought)
@@ -37,27 +37,30 @@ function s = solve(ant,wld) % wld needs to be an instance of world
   Pheromone_CS = Viability_CS.*world.Pher_CS;
   
   % Step 1; Check if a home has been linked to a closure, if not, select:
-  % Loop through the Lhc_matrix columns(homes), if all values in a column are non-zero elements, select the column index(home_number) 
-  % Step 2; Find a closure (with remaining capacity) to link the slected home to:
+  % Loop through the Lhc_matrix rows(homes), if all values in a row are non-zero elements, select the row index(home_number) 
+  % Step 2; Find a closure (with remaining capacity) to link the selected home to:
   % Use Probability Function to select the closure to link the selected home to (Pheromone_value/sum(Pheromone_values))
          
- % Trial 2: With pheromone matrices: stochastic
- %TODO: Select homes at random and not sequentially each time
+ % Attempt 2: With pheromone matrices and stochastic home selection
+ %randperm selects homes at random and not sequentially each time
  printf("Connecting homes to closures . . .\n")
-   for h = 1:world.home_no % for each home, starting with home 1
+   for h = randperm(world.home_no) % for each home, in a random order
+   %for h = 1:world.home_no %to select homes sequentially
+   %Stochastic method takes longer to get good solutions but finds better solutions
      printf("Finding solution for home %d \n",h)
      select_home = sum(Lhc,2)'; % check if a link exists between the home and any closures
-     #display(sum(Lhc,2));  Delete this line
+     
      if select_home (h) == 0; % if no link exists between the home and closures
        #display(Lhc);
        closure_links = sum(Lhc); % returns number of homes linked to each closure in an array(1*closures)
-       #display(sum(Lhc)); Delete this line
        available_closures = closure_links < MaxLinks_CH; % returns 0/1 values indicating the availability of each closure
        
        #Pheromone_HC'(:,h)' #Pheromone values btn home h and all closures
 
-       %Get the pheromone values btn this home and all closures in order to select a closure
-       Pheromone_home = Pheromone_HC'(:,h)'.*available_closures; % replaces all phrmn_values btn home and cls to 0 for cls with no capacity
+       %Get the pheromone values btn this home and all closures in order to select a closure (essentially the h'th row of Pher_HC)
+       %Trust me, this magic function works
+       % Also set all phrmn_values btn home and cls to 0 for cls with no remaining capacity
+       Pheromone_home = Pheromone_HC'(:,h)'.*available_closures; 
        #display(Pheromone_home);
        % compute probabiltiies
        p = Pheromone_home;
@@ -107,7 +110,7 @@ function s = solve(ant,wld) % wld needs to be an instance of world
              break
            endif
          endfor
-       #The next 3 lines are a hack to set row h of Lhc to the value of link_home
+       #The next 3 lines are a hack to set row c of Lcs to the value of link_closure
       #IT is a thing I couldn't think of how to do natively in Octave
       Lcs = Lcs';
       Lcs(:,c) = link_closure';
